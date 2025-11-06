@@ -1,6 +1,10 @@
 # Vite Slop Template - AI Agent Guide
 
-This document provides development guidelines for AI coding assistants working with this Vite + React + TypeScript starter template.
+**🤖 This document is specifically designed for AI coding assistants.**
+
+This guide provides development guidelines for AI agents working with this Vite + React + TypeScript starter template.
+
+> **📖 For detailed landing page documentation, refer to [LANDING_PAGE_GUIDE.md](./LANDING_PAGE_GUIDE.md)**
 
 ---
 
@@ -384,6 +388,8 @@ export function FadeIn({ children }: { children: React.ReactNode }) {
 
 This template includes a complete set of landing page section components optimized for AI agents to quickly create beautiful, animated landing pages.
 
+> **📚 IMPORTANT:** For comprehensive landing page documentation including detailed component APIs, animation system guides, customization examples, and AI agent-specific instructions, **refer to [LANDING_PAGE_GUIDE.md](./LANDING_PAGE_GUIDE.md)**
+
 ### Available Landing Page Sections
 
 **9 Pre-built Sections:**
@@ -617,14 +623,15 @@ See `src/pages/landing-page.tsx` for a complete, fully-featured landing page exa
 
 ### Detailed Documentation
 
-For comprehensive documentation including:
-- Detailed component API reference
-- Animation system guide
-- Customization examples
-- Troubleshooting tips
-- AI agent-specific instructions
+> **⚡ AI Agents: Always refer to [LANDING_PAGE_GUIDE.md](./LANDING_PAGE_GUIDE.md) when working with landing pages**
 
-**See:** [LANDING_PAGE_GUIDE.md](./LANDING_PAGE_GUIDE.md)
+The landing page guide includes:
+- 📋 Detailed component API reference for all 9 sections
+- 🎬 Complete animation system guide with presets
+- 🎨 Styling and customization examples
+- 🔧 Common modifications and troubleshooting
+- 🤖 AI agent-specific instructions and tips
+- 🚀 Quick start templates and patterns
 
 ---
 
