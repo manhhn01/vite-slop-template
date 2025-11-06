@@ -1,0 +1,610 @@
+# Vite Slop Template - AI Agent Guide
+
+This document provides development guidelines for AI coding assistants working with this Vite + React + TypeScript starter template.
+
+---
+
+## Project Overview
+
+**Tech Stack:**
+- **Build Tool:** Vite 7
+- **Framework:** React 19 with TypeScript
+- **Styling:** Tailwind CSS v4 with CSS variables
+- **Components:** shadcn/ui (New York style) + Radix UI primitives
+- **Forms:** React Hook Form + Zod validation
+- **Animations:** Framer Motion
+- **Icons:** Lucide React
+- **Theme:** next-themes (dark/light mode)
+
+**Project Structure:**
+```
+src/
+├── components/
+│   └── ui/              # shadcn/ui components (auto-generated)
+├── lib/
+│   └── utils.ts         # Utility functions (cn helper)
+├── hooks/               # Custom React hooks
+├── assets/              # Static assets
+├── App.tsx              # Main app component
+├── main.tsx             # Entry point
+└── index.css            # Global styles + Tailwind
+```
+
+---
+
+## Development Standards
+
+### 1. TypeScript Best Practices
+
+**Always use TypeScript:**
+- Define explicit types for component props
+- Use type inference for state and variables when obvious
+- Prefer `interface` for component props, `type` for unions
+- Enable strict mode compliance
+
+**Example:**
+```typescript
+interface UserCardProps {
+  name: string;
+  email: string;
+  role?: 'admin' | 'user';
+  onDelete?: () => void;
+}
+
+export function UserCard({ name, email, role = 'user', onDelete }: UserCardProps) {
+  // Component implementation
+}
+```
+
+### 2. Component Patterns
+
+**File Organization:**
+- One component per file
+- Name file same as component: `UserCard.tsx`
+- Co-locate related types in the same file
+- Keep UI components in `src/components/ui/`
+- Feature components go in `src/components/`
+
+**Component Structure:**
+```typescript
+// 1. Imports
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+
+// 2. Types
+interface ComponentProps {
+  className?: string;
+  children?: React.ReactNode;
+}
+
+// 3. Component
+export function Component({ className, children }: ComponentProps) {
+  // 4. Hooks
+  const [state, setState] = useState(false);
+
+  // 5. Handlers
+  const handleClick = () => {
+    setState(!state);
+  };
+
+  // 6. Render
+  return (
+    <div className={cn('default-classes', className)}>
+      {children}
+      <Button onClick={handleClick}>Toggle</Button>
+    </div>
+  );
+}
+```
+
+### 3. Styling with Tailwind
+
+**Use the `cn()` utility for conditional classes:**
+```typescript
+import { cn } from '@/lib/utils';
+
+<div className={cn(
+  'base-classes',
+  isActive && 'active-classes',
+  error && 'error-classes',
+  className
+)} />
+```
+
+**Follow Tailwind CSS v4 conventions:**
+- Use CSS variables defined in `index.css`
+- Leverage semantic color tokens: `bg-background`, `text-foreground`, `border-border`
+- Use responsive prefixes: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
+- Prefer composition over custom CSS
+
+### 4. shadcn/ui Component Usage
+
+**Adding new components:**
+```bash
+npx shadcn@latest add [component-name]
+```
+
+**Using components:**
+```typescript
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+<Card>
+  <CardHeader>
+    <CardTitle>Title</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <Button variant="outline">Click me</Button>
+  </CardContent>
+</Card>
+```
+
+**Component variants:**
+- Most shadcn components accept `variant` and `size` props
+- Check component source in `src/components/ui/` for available variants
+- Use className to override or extend styles
+
+### 5. Form Handling
+
+**Use React Hook Form + Zod:**
+```typescript
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+
+const formSchema = z.object({
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+export function LoginForm() {
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="you@example.com" {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </Form>
+  );
+}
+```
+
+### 6. Custom Hooks
+
+**Location:** `src/hooks/`
+
+**Naming:** Always prefix with `use`
+
+**Example:**
+```typescript
+// src/hooks/use-debounce.ts
+import { useEffect, useState } from 'react';
+
+export function useDebounce<T>(value: T, delay: number = 500): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+```
+
+### 7. Path Aliases
+
+**Use path aliases for imports:**
+```typescript
+// Good
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { useDebounce } from '@/hooks/use-debounce';
+
+// Bad
+import { Button } from '../../../components/ui/button';
+```
+
+**Available aliases:**
+- `@/components` -> `src/components`
+- `@/lib` -> `src/lib`
+- `@/hooks` -> `src/hooks`
+- `@/ui` -> `src/components/ui`
+
+---
+
+## Common Patterns
+
+### Theme Toggle
+
+```typescript
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { Button } from '@/components/ui/button';
+
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+    >
+      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <span className="sr-only">Toggle theme</span>
+    </Button>
+  );
+}
+```
+
+### Data Fetching with State
+
+```typescript
+import { useEffect, useState } from 'react';
+
+interface User {
+  id: number;
+  name: string;
+}
+
+export function UserList() {
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/users')
+      .then(res => res.json())
+      .then(data => {
+        setUsers(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <div>
+      {users.map(user => (
+        <div key={user.id}>{user.name}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+### Dialog Pattern
+
+```typescript
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+
+export function UserDialog() {
+  const [open, setOpen] = useState(false);
+
+  const handleSubmit = () => {
+    // Handle form submission
+    setOpen(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>Open Dialog</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Dialog Title</DialogTitle>
+        </DialogHeader>
+        {/* Dialog content */}
+        <Button onClick={handleSubmit}>Submit</Button>
+      </DialogContent>
+    </Dialog>
+  );
+}
+```
+
+### Animated Component (Framer Motion)
+
+```typescript
+import { motion } from 'framer-motion';
+
+export function FadeIn({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+```
+
+---
+
+## Component Templates
+
+### Feature Component Template
+
+```typescript
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+
+interface FeatureComponentProps {
+  title: string;
+  description?: string;
+  className?: string;
+  onAction?: () => void;
+}
+
+export function FeatureComponent({
+  title,
+  description,
+  className,
+  onAction,
+}: FeatureComponentProps) {
+  const [state, setState] = useState(false);
+
+  const handleClick = () => {
+    setState(!state);
+    onAction?.();
+  };
+
+  return (
+    <Card className={cn('w-full', className)}>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {description && <p className="text-muted-foreground mb-4">{description}</p>}
+        <Button onClick={handleClick} variant={state ? 'default' : 'outline'}>
+          {state ? 'Active' : 'Inactive'}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+### Page Layout Template
+
+```typescript
+import { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
+
+interface PageLayoutProps {
+  children: ReactNode;
+  title?: string;
+  description?: string;
+  className?: string;
+}
+
+export function PageLayout({ children, title, description, className }: PageLayoutProps) {
+  return (
+    <div className={cn('container mx-auto py-8 px-4', className)}>
+      {(title || description) && (
+        <div className="mb-8">
+          {title && <h1 className="text-4xl font-bold mb-2">{title}</h1>}
+          {description && <p className="text-muted-foreground text-lg">{description}</p>}
+        </div>
+      )}
+      <div>{children}</div>
+    </div>
+  );
+}
+```
+
+---
+
+## Development Workflow
+
+### Commands
+
+```bash
+# Start dev server (http://localhost:5173)
+npm run dev
+
+# Type check
+npx tsc --noEmit
+
+# Lint code
+npm run lint
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Add shadcn component
+npx shadcn@latest add button
+```
+
+### Adding a New Feature
+
+1. **Plan the component structure**
+   - Identify required UI components
+   - Define props interface
+   - Consider state management needs
+
+2. **Create component files**
+   - Add to `src/components/` for features
+   - Use shadcn/ui components from `src/components/ui/`
+
+3. **Implement with TypeScript**
+   - Define types first
+   - Use existing patterns
+   - Leverage path aliases
+
+4. **Style with Tailwind**
+   - Use semantic tokens
+   - Apply the `cn()` utility
+   - Keep responsive design in mind
+
+5. **Test in dev mode**
+   - Check hot module replacement
+   - Verify TypeScript types
+   - Test responsive behavior
+
+---
+
+## Best Practices
+
+### DO
+
+- Use TypeScript for all files
+- Leverage path aliases (`@/`)
+- Use the `cn()` utility for className merging
+- Follow shadcn/ui component patterns
+- Keep components small and focused
+- Use semantic HTML elements
+- Implement proper error boundaries
+- Validate forms with Zod
+- Use CSS variables for theming
+- Write accessible components (ARIA labels)
+
+### DON'T
+
+- Mix CSS Modules with Tailwind
+- Inline complex logic in JSX
+- Ignore TypeScript errors
+- Hardcode colors (use Tailwind tokens)
+- Create deeply nested components
+- Skip prop validation
+- Forget responsive design
+- Override shadcn styles unnecessarily
+- Use `any` type
+- Ignore ESLint warnings
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+**Import errors with path aliases:**
+- Check `vite.config.ts` alias configuration
+- Ensure `tsconfig.json` paths are correct
+- Restart TypeScript server in editor
+
+**Tailwind classes not applying:**
+- Check `index.css` imports
+- Verify Tailwind plugin in `vite.config.ts`
+- Clear cache and restart dev server
+
+**shadcn component styling issues:**
+- Check CSS variables in `index.css`
+- Verify component was added with correct config
+- Review `components.json` settings
+
+**Type errors:**
+- Run `npx tsc --noEmit` to see all errors
+- Check imported types from dependencies
+- Ensure React types are installed
+
+---
+
+## Quick Reference
+
+### Essential shadcn Components
+
+```typescript
+// Layout
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
+
+// Forms
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Select } from '@/components/ui/select';
+
+// Overlays
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Popover, PopoverContent } from '@/components/ui/popover';
+import { Tooltip, TooltipContent } from '@/components/ui/tooltip';
+
+// Feedback
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { toast } from 'sonner';
+```
+
+### Color Tokens
+
+```css
+/* Background */
+bg-background, bg-foreground
+bg-card, bg-popover
+bg-primary, bg-secondary
+bg-muted, bg-accent
+
+/* Text */
+text-foreground, text-muted-foreground
+text-primary, text-secondary
+text-destructive
+
+/* Border */
+border-border, border-input
+```
+
+---
+
+## Architecture Principles
+
+1. **Component Composition**: Build complex UIs from small, reusable components
+2. **Type Safety**: Use TypeScript to catch errors at compile time
+3. **Separation of Concerns**: Keep logic, styles, and markup organized
+4. **Accessibility First**: Ensure components are keyboard and screen-reader friendly
+5. **Performance**: Leverage React 19 features and Vite's fast HMR
+6. **Consistency**: Follow established patterns and naming conventions
+
+---
+
+**Last Updated:** 2025-01-06
+**Template Version:** 1.0.0
