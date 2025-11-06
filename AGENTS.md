@@ -20,10 +20,24 @@ This document provides development guidelines for AI coding assistants working w
 ```
 src/
 ├── components/
-│   └── ui/              # shadcn/ui components (auto-generated)
+│   ├── ui/              # shadcn/ui components (auto-generated)
+│   └── sections/        # Landing page section components
+│       ├── navbar.tsx
+│       ├── hero-section.tsx
+│       ├── features-section.tsx
+│       ├── steps-section.tsx
+│       ├── testimonials-section.tsx
+│       ├── pricing-section.tsx
+│       ├── faq-section.tsx
+│       ├── cta-section.tsx
+│       ├── footer.tsx
+│       └── index.ts     # Centralized exports
 ├── lib/
-│   └── utils.ts         # Utility functions (cn helper)
+│   ├── utils.ts         # Utility functions (cn helper)
+│   └── animations.ts    # Framer Motion animation presets
 ├── hooks/               # Custom React hooks
+├── pages/
+│   └── landing-page.tsx # Complete landing page example
 ├── assets/              # Static assets
 ├── App.tsx              # Main app component
 ├── main.tsx             # Entry point
@@ -241,6 +255,7 @@ import { Button } from '../../../components/ui/button';
 - `@/components` -> `src/components`
 - `@/lib` -> `src/lib`
 - `@/hooks` -> `src/hooks`
+- `@/pages` -> `src/pages`
 - `@/ui` -> `src/components/ui`
 
 ---
@@ -362,6 +377,254 @@ export function FadeIn({ children }: { children: React.ReactNode }) {
   );
 }
 ```
+
+---
+
+## Landing Page Components
+
+This template includes a complete set of landing page section components optimized for AI agents to quickly create beautiful, animated landing pages.
+
+### Available Landing Page Sections
+
+**9 Pre-built Sections:**
+
+1. **Navbar** - Responsive navigation with mobile menu
+2. **Hero Section** - Eye-catching header with CTA buttons and optional image
+3. **Features Section** - Grid layout showcasing features with icons
+4. **Steps Section** - "How It Works" process with numbered steps
+5. **Testimonials Section** - Customer reviews with avatars and ratings
+6. **Pricing Section** - Pricing tiers with feature lists and CTAs
+7. **FAQ Section** - Accordion-based frequently asked questions
+8. **CTA Section** - Final call-to-action with gradient background
+9. **Footer** - Comprehensive footer with links and social media
+
+### Quick Start: Creating a Landing Page
+
+```typescript
+import {
+  Navbar,
+  HeroSection,
+  FeaturesSection,
+  PricingSection,
+  Footer,
+} from "@/components/sections";
+import { Zap, Shield, Rocket } from "lucide-react";
+
+export function MyLandingPage() {
+  return (
+    <div>
+      <Navbar
+        brandName="MyBrand"
+        links={[
+          { label: "Features", href: "#features" },
+          { label: "Pricing", href: "#pricing" },
+        ]}
+        ctaButton={{ text: "Get Started", href: "#signup" }}
+      />
+
+      <HeroSection
+        title="Build Something Amazing"
+        description="The best solution for your needs."
+        primaryCta={{ text: "Get Started", href: "#pricing" }}
+        secondaryCta={{ text: "Learn More", href: "#about" }}
+        image="https://example.com/hero.jpg"
+      />
+
+      <FeaturesSection
+        title="Why Choose Us"
+        features={[
+          {
+            icon: Zap,
+            title: "Fast",
+            description: "Lightning-fast performance",
+          },
+          {
+            icon: Shield,
+            title: "Secure",
+            description: "Bank-level security",
+          },
+          {
+            icon: Rocket,
+            title: "Scalable",
+            description: "Grows with your business",
+          },
+        ]}
+      />
+
+      <Footer
+        companyName="MyBrand"
+        columns={[
+          {
+            title: "Product",
+            links: [
+              { label: "Features", href: "#features" },
+              { label: "Pricing", href: "#pricing" },
+            ],
+          },
+        ]}
+        socialLinks={{
+          github: "https://github.com/mycompany",
+          twitter: "https://twitter.com/mycompany",
+        }}
+      />
+    </div>
+  );
+}
+```
+
+### Animation System
+
+The template includes a comprehensive animation system with pre-built variants and utilities.
+
+**Import animation presets:**
+```typescript
+import {
+  fadeInUp,
+  fadeInDown,
+  fadeInLeft,
+  fadeInRight,
+  scaleIn,
+  slideInLeft,
+  slideInRight,
+  staggerContainer,
+  staggerItem,
+  transitions,
+  viewportOptions,
+} from "@/lib/animations";
+```
+
+**Basic animation usage:**
+```typescript
+import { motion } from "framer-motion";
+import { fadeInUp, transitions, viewportOptions } from "@/lib/animations";
+
+<motion.div
+  variants={fadeInUp}
+  initial="hidden"
+  whileInView="visible"
+  viewport={viewportOptions}
+  transition={transitions.default}
+>
+  Animated content
+</motion.div>
+```
+
+**Stagger animation for lists:**
+```typescript
+import { motion } from "framer-motion";
+import { staggerContainer, staggerItem, viewportOptions } from "@/lib/animations";
+
+<motion.div
+  variants={staggerContainer}
+  initial="hidden"
+  whileInView="visible"
+  viewport={viewportOptions}
+>
+  {items.map((item) => (
+    <motion.div key={item.id} variants={staggerItem}>
+      {item.content}
+    </motion.div>
+  ))}
+</motion.div>
+```
+
+**Transition presets:**
+- `transitions.default` - Standard 0.5s ease-out
+- `transitions.smooth` - Slow 0.8s with custom bezier curve
+- `transitions.spring` - Bouncy spring animation
+- `transitions.bouncy` - More pronounced spring effect
+- `transitions.fast` - Quick 0.3s
+- `transitions.slow` - Slow 1s
+
+### Component Props Reference
+
+**Hero Section:**
+```typescript
+interface HeroSectionProps {
+  badge?: string;
+  title: string;
+  description: string;
+  primaryCta: { text: string; href: string };
+  secondaryCta?: { text: string; href: string };
+  image?: string;
+}
+```
+
+**Features Section:**
+```typescript
+interface Feature {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
+
+interface FeaturesSectionProps {
+  badge?: string;
+  title: string;
+  description?: string;
+  features: Feature[];
+}
+```
+
+**Pricing Section:**
+```typescript
+interface PricingTier {
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  features: string[];
+  cta: { text: string; href: string };
+  popular?: boolean;
+}
+
+interface PricingSectionProps {
+  badge?: string;
+  title: string;
+  description?: string;
+  pricingTiers: PricingTier[];
+}
+```
+
+### Landing Page Best Practices
+
+**DO:**
+- Use descriptive, action-oriented CTA text
+- Include social proof (testimonials, user counts)
+- Keep sections focused on one main idea
+- Use high-quality, optimized images
+- Ensure mobile-responsive design
+- Add clear value propositions
+- Use consistent spacing and typography
+- Implement smooth scroll animations
+
+**DON'T:**
+- Overcrowd sections with too much content
+- Use generic stock photos
+- Mix too many different animation styles
+- Forget to test on mobile devices
+- Use hard-to-read fonts or low contrast
+- Skip accessibility features (alt text, ARIA labels)
+- Use auto-playing videos or animations
+
+### Complete Example Reference
+
+See `src/pages/landing-page.tsx` for a complete, fully-featured landing page example with:
+- Sample data for all sections
+- Icon usage examples
+- Proper section ordering
+- Responsive design patterns
+
+### Detailed Documentation
+
+For comprehensive documentation including:
+- Detailed component API reference
+- Animation system guide
+- Customization examples
+- Troubleshooting tips
+- AI agent-specific instructions
+
+**See:** [LANDING_PAGE_GUIDE.md](./LANDING_PAGE_GUIDE.md)
 
 ---
 
@@ -606,5 +869,5 @@ border-border, border-input
 
 ---
 
-**Last Updated:** 2025-01-06
-**Template Version:** 1.0.0
+**Last Updated:** 2025-11-06
+**Template Version:** 2.0.0 (Landing Page Edition)
