@@ -86,22 +86,24 @@ Open [http://localhost:5173](http://localhost:5173) to view the landing page.
 
 ## 📖 Documentation
 
-### For AI Agents
+### For AI Agents 🤖
 
-See **[LANDING_PAGE_GUIDE.md](./LANDING_PAGE_GUIDE.md)** for comprehensive AI agent instructions including:
-- Component API reference
-- Animation system guide
-- Code examples
-- Best practices
-- Troubleshooting
-
-### For Developers
-
-See **[AGENTS.md](./AGENTS.md)** for development guidelines including:
-- Code standards
-- Component patterns
+See **[AGENTS.md](./AGENTS.md)** for AI coding assistant guidelines including:
+- Code standards and patterns
+- Component patterns and templates
 - TypeScript conventions
-- Styling guidelines
+- Styling guidelines with Tailwind CSS
+- Development workflows
+- References to LANDING_PAGE_GUIDE.md for detailed landing page work
+
+### For Developers & Detailed Landing Page Guide
+
+See **[LANDING_PAGE_GUIDE.md](./LANDING_PAGE_GUIDE.md)** for comprehensive landing page documentation including:
+- Component API reference for all 9 sections
+- Animation system guide with presets
+- Customization examples
+- Best practices
+- Troubleshooting tips
 
 ---
 
@@ -202,8 +204,8 @@ vite-slop-template/
 │   ├── main.tsx
 │   └── index.css
 ├── public/
-├── LANDING_PAGE_GUIDE.md    # AI Agent guide
-├── AGENTS.md                # Developer guide
+├── AGENTS.md                # AI Agent guide (for AI coding assistants)
+├── LANDING_PAGE_GUIDE.md    # Landing page guide (for developers & AI agents)
 ├── package.json
 ├── vite.config.ts
 └── tsconfig.json
