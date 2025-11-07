@@ -635,6 +635,307 @@ The landing page guide includes:
 
 ---
 
+## Component Variant System
+
+The template includes **27+ pre-built section component variants** offering different visual presentations while maintaining core functionality.
+
+### Available Variants
+
+**9 Component Types × 3-4 Variants Each = 27+ Total Variants**
+
+| Component | Variants | Total |
+|-----------|----------|-------|
+| **Navbar** | Transparent, Centered, MegaMenu | 3 |
+| **Hero** | Split, Minimal, Video, FullScreen | 4 |
+| **Features** | List, Bento, IconGrid | 3 |
+| **Steps** | Timeline, Horizontal, Cards | 3 |
+| **Testimonials** | Carousel, Masonry, QuoteWall | 3 |
+| **Pricing** | Toggle, Table, Simple | 3 |
+| **FAQ** | TwoColumn, Categorized, Searchable | 3 |
+| **CTA** | FullWidth, Split, Minimal | 3 |
+| **Footer** | Minimal, Newsletter, Mega | 3 |
+
+### Quick Start with Variants
+
+**1. Import any variant:**
+```typescript
+import { HeroSectionSplit, NavbarTransparent } from "@/components/sections";
+```
+
+**2. Use like any component:**
+```typescript
+<HeroSectionSplit
+  title="Your Title"
+  description="Your description"
+  primaryCta={{ text: "Get Started", href: "/signup" }}
+  image="/your-image.jpg"
+  imagePosition="right"
+/>
+```
+
+### Variant Naming Convention
+
+All variants follow this pattern:
+- `[Component]` - Original component
+- `[Component][Variant]` - Variant version
+
+**Examples:**
+- `HeroSection` → `HeroSectionSplit`, `HeroSectionMinimal`
+- `FeaturesSection` → `FeaturesSectionList`, `FeaturesSectionBento`
+
+### File Structure
+
+**Each variant is in its own file for optimal bundle size:**
+```
+src/components/sections/variants/
+├── navbar-transparent.tsx
+├── navbar-centered.tsx
+├── navbar-megamenu.tsx
+├── hero-split.tsx
+├── hero-minimal.tsx
+├── hero-video.tsx
+├── hero-fullscreen.tsx
+├── features-list.tsx
+├── features-bento.tsx
+├── features-icongrid.tsx
+├── steps-timeline.tsx
+├── steps-horizontal.tsx
+├── steps-cards.tsx
+├── testimonials-carousel.tsx
+├── testimonials-masonry.tsx
+├── testimonials-quotewall.tsx
+├── pricing-toggle.tsx
+├── pricing-table.tsx
+├── pricing-simple.tsx
+├── faq-twocolumn.tsx
+├── faq-categorized.tsx
+├── faq-searchable.tsx
+├── cta-fullwidth.tsx
+├── cta-split.tsx
+├── cta-minimal.tsx
+├── footer-minimal.tsx
+├── footer-newsletter.tsx
+├── footer-mega.tsx
+└── index.ts
+```
+
+### Import Locations
+
+**Option 1: Centralized export (recommended for convenience)**
+```typescript
+import { HeroSectionSplit } from "@/components/sections";
+```
+
+**Option 2: Direct import (best for bundle size)**
+```typescript
+import { HeroSectionSplit } from "@/components/sections/variants/hero-split";
+```
+
+**Option 3: Variants index (middle ground)**
+```typescript
+import { HeroSectionSplit } from "@/components/sections/variants";
+```
+
+**Bundle Size Impact:**
+- Option 1 & 3: Same size (tree-shaking removes unused variants)
+- Option 2: Explicitly clear which file is imported (recommended for libraries)
+
+### Example: Building a Page with Variants
+
+```typescript
+import {
+  NavbarTransparent,
+  HeroSectionSplit,
+  FeaturesSectionBento,
+  TestimonialsSectionCarousel,
+  PricingSectionToggle,
+  FaqSectionSearchable,
+  CtaSectionMinimal,
+  FooterNewsletter,
+} from "@/components/sections";
+
+export function MyLandingPage() {
+  return (
+    <div>
+      <NavbarTransparent
+        brandName="MyApp"
+        links={[
+          { label: "Features", href: "#features" },
+          { label: "Pricing", href: "#pricing" },
+        ]}
+        ctaButton={{ text: "Sign Up", href: "/signup" }}
+      />
+
+      <HeroSectionSplit
+        title="Build Faster with AI"
+        description="The complete solution for modern development"
+        primaryCta={{ text: "Get Started", href: "/signup" }}
+        image="/product-screenshot.png"
+        imagePosition="right"
+      />
+
+      <FeaturesSectionBento
+        title="Powerful Features"
+        featuredIndex={0}
+        features={[/* ... */]}
+      />
+
+      {/* ... more sections ... */}
+
+      <FooterNewsletter
+        companyName="MyApp"
+        newsletterTitle="Stay Updated"
+        columns={[/* ... */]}
+      />
+    </div>
+  );
+}
+```
+
+### Visual Reference
+
+**Internal Showcase Page:** `src/pages/variants-showcase.tsx`
+
+Access the variants showcase page (not linked in main navigation) to:
+- See all 27+ variants visually
+- Compare styling differences
+- Copy code examples
+- Understand use cases
+
+### Variant-Specific Documentation
+
+Every variant file includes comprehensive JSDoc comments with:
+- **VISUAL DESCRIPTION** - What it looks like
+- **USE WHEN** - Appropriate use cases
+- **DIFFERENCES FROM ORIGINAL** - Key changes
+- **AI AGENT INSTRUCTIONS** - Implementation guidance
+- **@example** - Working code examples
+
+**Example from hero-split.tsx:**
+```typescript
+/**
+ * HeroSectionSplit Component
+ *
+ * VISUAL DESCRIPTION:
+ * - Two-column layout with 50/50 split
+ * - Text content on one side, image/media on the other
+ * - Configurable image position (left or right)
+ *
+ * USE WHEN:
+ * - You want to showcase a product screenshot prominently
+ * - Building SaaS product pages
+ *
+ * AI AGENT INSTRUCTIONS:
+ * 1. Provide a high-quality image for best results
+ * 2. Use imagePosition="left" or "right" to control layout
+ * ...
+ */
+```
+
+### Quick Variant Reference
+
+**Navbar Variants:**
+- `navbar-transparent.tsx` - Transparent → solid on scroll
+- `navbar-centered.tsx` - Centered logo, split links
+- `navbar-megamenu.tsx` - Multi-column dropdown menus
+
+**Hero Variants:**
+- `hero-split.tsx` - Two-column text + image
+- `hero-minimal.tsx` - Clean centered text
+- `hero-video.tsx` - Background video overlay
+- `hero-fullscreen.tsx` - Full viewport height
+
+**Features Variants:**
+- `features-list.tsx` - Horizontal rows
+- `features-bento.tsx` - Asymmetric grid
+- `features-icongrid.tsx` - Icons + titles only
+
+**Steps Variants:**
+- `steps-timeline.tsx` - Vertical timeline
+- `steps-horizontal.tsx` - Horizontal stepper
+- `steps-cards.tsx` - Card grid
+
+**Testimonials Variants:**
+- `testimonials-carousel.tsx` - Rotating single view
+- `testimonials-masonry.tsx` - Pinterest-style grid
+- `testimonials-quotewall.tsx` - Minimal quotes
+
+**Pricing Variants:**
+- `pricing-toggle.tsx` - Monthly/yearly switch
+- `pricing-table.tsx` - Feature comparison table
+- `pricing-simple.tsx` - Stacked cards
+
+**FAQ Variants:**
+- `faq-twocolumn.tsx` - Two-column layout
+- `faq-categorized.tsx` - Tabbed categories
+- `faq-searchable.tsx` - Search filtering
+
+**CTA Variants:**
+- `cta-fullwidth.tsx` - Edge-to-edge banner
+- `cta-split.tsx` - Image + text split
+- `cta-minimal.tsx` - Simple text links
+
+**Footer Variants:**
+- `footer-minimal.tsx` - Single row compact
+- `footer-newsletter.tsx` - Email signup featured
+- `footer-mega.tsx` - Large comprehensive
+
+### Choosing the Right Variant
+
+**Ask yourself:**
+1. **Visual Style:** Bold and dramatic vs. clean and minimal?
+2. **Content Amount:** How many items to display?
+3. **User Journey:** What stage of funnel? (Awareness → Consideration → Conversion)
+4. **Context:** What's above and below this section?
+5. **Audience:** B2B professional vs. B2C consumer?
+
+**Common Combinations:**
+- **Bold Landing:** `HeroSectionFullScreen` + `FeaturesSectionBento` + `CtaSectionFullWidth`
+- **Professional SaaS:** `HeroSectionSplit` + `FeaturesSectionList` + `PricingSectionToggle`
+- **Minimal Portfolio:** `HeroSectionMinimal` + `FeaturesSectionIconGrid` + `CtaSectionMinimal`
+
+### Best Practices
+
+**DO:**
+- Mix and match variants across sections
+- Read JSDoc comments before using
+- Test on mobile and desktop
+- Use consistent visual weight throughout page
+- Leverage TypeScript for prop validation
+
+**DON'T:**
+- Mix too many different styles (limit to 2-3 styles per page)
+- Use all bold variants (overwhelming)
+- Ignore mobile responsiveness
+- Forget required props
+- Override core functionality unnecessarily
+
+### Performance
+
+- **Tree-shakeable:** Variants are "dead code" until imported
+- **No bundle bloat:** Only imported variants are included in build
+- **Same optimization:** All variants use same Framer Motion animations
+- **Lazy loading:** Consider lazy loading below-fold sections
+
+### Troubleshooting
+
+**Variant not found?**
+- Check spelling (variants are PascalCase)
+- Ensure you're importing from correct path
+- Verify variant exists in variants folder
+
+**TypeScript errors?**
+- Check required props in JSDoc
+- Use type inference: hover over component in IDE
+- Refer to original section for base prop types
+
+**Styling issues?**
+- Variants use same Tailwind theme
+- Check CSS variables in `index.css`
+- Test in both light and dark modes
+
+---
+
 ## Component Templates
 
 ### Feature Component Template

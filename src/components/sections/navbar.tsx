@@ -71,7 +71,7 @@ export function Navbar({ brandName, links, ctaButton }: NavbarProps) {
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-            <nav className="flex flex-col gap-4 mt-8">
+            <nav className="flex flex-col gap-4 mt-8 px-2">
               {links.map((link, index) => (
                 <a
                   key={index}

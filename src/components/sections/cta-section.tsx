@@ -48,7 +48,7 @@ export function CtaSection({
           {/* Background decoration */}
           <div className="absolute inset-0 -z-10">
             <div className="absolute right-0 top-0 -translate-y-1/2 translate-x-1/2 blur-3xl opacity-30">
-              <div className="aspect-square w-[40rem] rounded-full bg-white" />
+              <div className="aspect-square w-160 rounded-full bg-white" />
             </div>
           </div>
 
@@ -87,7 +87,7 @@ export function CtaSection({
                   asChild
                   size="lg"
                   variant="outline"
-                  className="text-base border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
+                  className="text-base border-primary-foreground/20 bg-primary text-primary-foreground hover:bg-primary-foreground/10"
                 >
                   <a href={secondaryCta.href}>
                     {secondaryCta.text}
