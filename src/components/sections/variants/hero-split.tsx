@@ -31,6 +31,7 @@ import {
   fadeInLeft,
   fadeInRight,
   viewportOptions,
+  transitions,
 } from "@/lib/animations";
 import { ArrowRight, Play } from "lucide-react";
 

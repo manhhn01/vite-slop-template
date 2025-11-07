@@ -26,7 +26,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Github, Twitter, Linkedin, Youtube } from "lucide-react";
+import { Github, Twitter, Linkedin, Youtube, Mail } from "lucide-react";
 
 interface FooterLink {
   label: string;
